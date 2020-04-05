@@ -12,18 +12,36 @@
    </head>
 <body style="background-image: url(./img/snowBackground.jpg);">
     <div id='app'>
-        <h1 style="text-align: center; font-family:Impact; color: white">WELCOME TO SNOWBALLZ IN ANN ARBOR</h1>
-        <h3 style="text-align: center; font-family:Impact; color: white">Choose your location...</h3>
-        <div class = "col-lg-4 col-md-4 col-sm-4" style='margin-bottom: 5px; display: inline; height: 250px' v-for="location in locations">
-            <div class="col-sm-10" style='max-width:200px;margin-right: 3px'>
-                <button class = "btn btn-default" v-on:click="selectLocation($event, location)">
-                    {{ location.name }}
-                </button>
-                <img v-bind:src="location.img" style='width: 120%; display: inline;'>
+        <div v-if="homePage">
+            <h1 style="text-align: center; font-family:Impact; color: white; font-size: 75px">WELCOME TO SNOWBALLZ IN ANN ARBOR</h1>
+            <h3 style="text-align: center; font-family:Impact; color: white">Choose your location...</h3>
+            <div class = "col-lg-4 col-md-4 col-sm-4" style='margin-bottom: 5px; display: inline; height: 250px' v-for="location in locations">
+                <div class="col-lg-20" style='max-width:200px;margin-right: 3px'>
+                    <button class = "btn btn-default" v-on:click="selectLocation($event, location)">
+                        {{ location.name }}
+                    </button>
+                    <img v-bind:src="location.img" style='width: 120%; display: inline;'>
+                </div>
             </div>
         </div>
-        <div v-if="selectedLocation != ''">
-            YOU SELECTED {{ selectedLocation.name}}
+        <div v-else-if="levelPage">
+            <div style="text-align: center; font-family:Impact; color: white">
+                <h1>You selected {{ selectedLocation.name }}</h1>
+                <h3>Choose your level...</h3>
+                <div class = "col-lg-4 col-md-4 col-sm-4" style='margin-bottom: 5px; display: inline; height: 250px' v-for="grade in grades">
+                    <div class="col-lg-20" style='max-width:200px;margin-right: 3px'>
+                        <button class = "btn btn-default" v-on:click="selectGrade($event, grade)">
+                            {{ grade }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-else-if="gamePage">
+            <div style="text-align: center; font-family:Impact; color: white">
+                <h1>You selected {{ selectedGrade }} in {{ selectedLocation.name }}</h1>
+            </div>
+            <button v-on:click="beginGame()" class = "btn btn-default" style="size: 200; text-align: center;"> Click to begin!</button>
         </div>
     </div>
     <script src="script.js"></script>

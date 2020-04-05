@@ -35,10 +35,23 @@ var resultView = new Vue({
         },
       ],
       selectedLocation: '',
+      grades: ['Freshman' , 'Sophomore' , 'Junior', 'Senior'],
+      homePage: true,
+      levelPage: false,
+      gamePage: false,
+      selectedGrade: ''
     },
     methods: {
       selectLocation(event, location) {
         this.selectedLocation = location;
+        this.homePage = false;
+        this.levelPage = true;
+      },
+
+      selectGrade(event, grade) {
+        this.gamePage = true;
+        this.levelPage = false;
+        this.selectedGrade = grade;
       }
   
     }
