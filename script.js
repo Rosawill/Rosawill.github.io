@@ -34,10 +34,12 @@ var resultView = new Vue({
           selected: false
         },
       ],
+      selectedLocation: '',
     },
     methods: {
-
-  
+      selectLocation(event, location) {
+        this.selectedLocation = location;
+      }
   
     }
   })
