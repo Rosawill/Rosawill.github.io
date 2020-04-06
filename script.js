@@ -39,7 +39,12 @@ var resultView = new Vue({
       homePage: true,
       levelPage: false,
       gamePage: false,
-      selectedGrade: ''
+      levelLoad: false,
+      playGame: false,
+      selectedGrade: '',
+      tips: ['Go to Bivouac for winter gear!', 'Check out Zingermans for some of Ann Arbors best hot chocolate', 'Visit Yost for some ice skating!'],
+      tipNum: 0,
+      levelNum: 0,
     },
     methods: {
       selectLocation(event, location) {
@@ -52,6 +57,14 @@ var resultView = new Vue({
         this.gamePage = true;
         this.levelPage = false;
         this.selectedGrade = grade;
+      },
+
+      beginGame() {
+        this.gamePage = false;
+        this.playGame = true;
+        this.tipNum = Math.floor((Math.random() * this.tips.length));
+        this.levelNum += 1;
+        $('body').css('background-image', "url("+this.selectedLocation.img+")");
       }
   
     }

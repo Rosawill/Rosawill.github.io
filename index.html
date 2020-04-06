@@ -41,7 +41,22 @@
             <div style="text-align: center; font-family:Impact; color: white">
                 <h1>You selected {{ selectedGrade }} in {{ selectedLocation.name }}</h1>
             </div>
-            <button v-on:click="beginGame()" class = "btn btn-default" style="size: 200; text-align: center;"> Click to begin!</button>
+            <div style="font-family:Impact; width: 100%; display: flex; align-items: center; justify-content: center;">
+                <button v-on:click="beginGame()" class = "btn btn-default" > 
+                    Click to begin!
+                </button>
+            </div>
+        </div>
+        <div v-else-if="playGame">
+            <div style="font-size: 50px ;font-family:Impact; color: black; border: black; position: fixed; top: 0px; left: 0; z-index: 100; background: white;">
+                Level {{ levelNum }}
+            </div>
+            <div style="position: fixed; bottom: 0px; left: 500px ;">
+                <img src="./img/avatar1.png" style="width: 100px">
+            </div>
+            <div style="position: fixed; bottom: 0px; left: 400px ;">
+                <img src="./img/snowballShooter.png" style="width: 150px; transform: scaleX(-1);">
+            </div>
         </div>
     </div>
     <script src="script.js"></script>
