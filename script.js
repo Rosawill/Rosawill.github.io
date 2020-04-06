@@ -45,6 +45,9 @@ var resultView = new Vue({
       tips: ['Go to Bivouac for winter gear!', 'Check out Zingermans for some of Ann Arbors best hot chocolate', 'Visit Yost for some ice skating!'],
       tipNum: 0,
       levelNum: 0,
+      leftpos_player: 500,
+      leftpos_shooter: 400,
+      snowballIndex: 1,
     },
     methods: {
       selectLocation(event, location) {
@@ -65,8 +68,58 @@ var resultView = new Vue({
         this.tipNum = Math.floor((Math.random() * this.tips.length));
         this.levelNum += 1;
         $('body').css('background-image', "url("+this.selectedLocation.img+")");
-      }
-  
-    }
+      },
+
+      handleGlobalKeyDown(e) {
+        console.log(e.keyCode);
+        if(e.keyCode == "37"){ 
+            //left arrow
+           $('#player').css('left', this.leftpos_player - 10 + "px");
+           this.leftpos_player = this.leftpos_player - 10;
+
+           $('#shooter').css('left', this.leftpos_shooter - 10 + "px");
+           this.leftpos_shooter = this.leftpos_shooter - 10;
+        }
+        else if (e.keyCode == "39"){
+            //right arrow
+            $('#player').css('left', this.leftpos_player + 10 + "px");
+            this.leftpos_player = this.leftpos_player + 10;
+
+            $('#shooter').css('left', this.leftpos_shooter + 10 + "px");
+            this.leftpos_shooter = this.leftpos_shooter + 10;
+        }
+
+        else if (e.keycode == "38"){
+          console.log("fire attempt");
+            var snowballDivStr = "<div id='s-" + snowballIndex + "' class='snowball'><img src='img/snowball.jpg'/></div>";
+            playGame.append(snowballDivStr);
+            var curSnowball = $('#s-'+snowballIndex);
+            snowballIndex++;
+
+            curSnowball.css('top', shooter.css('top'));
+
+            var rxPos = parseInt(shooter.css('left')) + (shooter.width()/2);
+            curSnowball.css('left', rxPos);
+
+            setInterval( function() {
+              curSnowball.css('top', parseInt(curSnowball.css('top'))-10);
+
+              if (parseInt(curSnowball.css('top')) < curSnowball.height()) {
+
+              curSnowball.remove();
+              }
+            }, 50);
+
+        }
+      },
+    },
+
   })
+
+  window.addEventListener('keydown', function(e) {
+    resultView.handleGlobalKeyDown(e);
+  });
+  
+
+
   
