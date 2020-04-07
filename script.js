@@ -1,3 +1,4 @@
+points = 0; 
 var resultView = new Vue({
   el: '#app',
   data: {
@@ -50,43 +51,38 @@ var resultView = new Vue({
     leftpos_shooter: 400,
     snowballIndex: 0,
     snowballLimit: 32,
-    points: 0
+    avatars: [
+      {
+        img: './img/avatar1.png',
+        owned: true,
+        using: true
+      },
+      {
+        img: './img/avatar2.png',
+        owned: false,
+        using: false
+      },
+      {
+        img: './img/avatar3.png',
+        owned: false,
+        using: false
+      },
+      {
+        img: './img/avatar4.png',
+        owned: false,
+        using: false
+      },
+    ],
+    currentAvatar: {
+      index: 0,
+      img: './img/avatar1.png'
+    }
   },
   methods: {
     selectLocation(event, location) {
       this.selectedLocation = location;
       this.homePage = false;
       this.levelPage = true;
-    },
-
-    isColliding(o1, o2) {
-      return isOrWillCollide(o1, o2, 0, 0);
-    },
-
-    willCollide(o1, o2, o1_xChange, o1_yChange){
-      return isOrWillCollide(o1, o2, o1_xChange, o1_yChange);
-    },
-
-    isOrWillCollide(o1, o2, o1_xChange, o1_yChange){
-      const o1D = { 'left': o1.offset().left + o1_xChange,
-            'right': o1.offset().left + o1.width() + o1_xChange,
-            'top': o1.offset().top + o1_yChange,
-            'bottom': o1.offset().top + o1.height() + o1_yChange
-      };
-      const o2D = { 'left': o2.offset().left,
-            'right': o2.offset().left + o2.width(),
-            'top': o2.offset().top,
-            'bottom': o2.offset().top + o2.height()
-      };
-      // Adapted from https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
-      if (o1D.left < o2D.right &&
-        o1D.right > o2D.left &&
-        o1D.top < o2D.bottom &&
-        o1D.bottom > o2D.top) {
-         // collision detected!
-         return true;
-      }
-      return false;
     },
 
     selectGrade(event, grade) {
@@ -131,6 +127,23 @@ var resultView = new Vue({
     goToMarket() {
       this.levelLoad = false;
       this.marketPage = true;
+    },
+
+    purchaseAvatar(event, index) {
+      if(points >= 10){
+        this.avatars[index].owned = true;
+        points = points - 10;
+      }
+      else{
+        alert("You don't have enough points to purchase this avatar!");
+      }
+    },
+
+    changeAvatar(event, index) {
+      this.avatars[this.currentAvatar.index].using = false;
+      this.avatars[index].using = true;
+      this.currentAvatar.index = index;
+      this.currentAvatar.img = this.avatars[index].img;
     },
 
     handleGlobalKeyDown(e) {
@@ -218,7 +231,6 @@ function isOrWillCollide(o1, o2, o1_xChange, o1_yChange){
   return false;
 }
 
-points = 0; 
 pointsAdded = false;
 window.addEventListener('keydown', function(e) {
   resultView.handleGlobalKeyDown(e);
