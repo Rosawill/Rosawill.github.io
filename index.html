@@ -54,11 +54,11 @@
                 Level {{ levelNum }}, Snowballs Remaining: {{ snowballLimit - snowballIndex }}
             </div>
             <div class="pointsTile">
-                Points: {{ points }}
+                Points: <p id="pointsNum"> 0 </p>
             </div>
 
             <div v-for="(n, index) in levelNum">
-                <img v-for="(n, index) in 16" src="./img/iceBlock.gif" id="iceBlocks" style="width: 100px">
+                <img v-for="(n, index) in 16" src="./img/iceBlock.gif" class = "block" id="iceBlocks" style="width: 100px">
             </div>
             <div id="player">
                 <img src="./img/avatar1.png" style="width: 100px">
@@ -73,7 +73,16 @@
                 Ann Arbor Wintering Tip: {{tips[tipNum]}}
             </div>
             <div style="text-align: center; font-color: black">
+                <button v-on:click="goToMarket" class="levelTransitionButton">Market</button>
+            </div>
+            <div style="text-align: center; font-color: black">
                 <button v-on:click="newLevel" class="levelTransitionButton">Continue</button>
+            </div>
+        </div>
+        <div v-else-if="marketPage">
+            <h1 class="smallHeader">Wintering Market</h1>
+            <div style="text-align: center; font-color: black">
+                <button v-on:click="newLevel" class="levelTransitionButton">Continue to next level</button>
             </div>
         </div>
     </div>
