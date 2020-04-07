@@ -47,13 +47,44 @@ var resultView = new Vue({
       levelNum: 0,
       leftpos_player: 500,
       leftpos_shooter: 400,
-      snowballIndex: 1,
+      snowballIndex: 0,
+      snowballLimit: 32,
     },
     methods: {
       selectLocation(event, location) {
         this.selectedLocation = location;
         this.homePage = false;
         this.levelPage = true;
+      },
+
+      isColliding(o1, o2) {
+        return isOrWillCollide(o1, o2, 0, 0);
+      },
+
+      willCollide(o1, o2, o1_xChange, o1_yChange){
+        return isOrWillCollide(o1, o2, o1_xChange, o1_yChange);
+      },
+
+      isOrWillCollide(o1, o2, o1_xChange, o1_yChange){
+        const o1D = { 'left': o1.offset().left + o1_xChange,
+              'right': o1.offset().left + o1.width() + o1_xChange,
+              'top': o1.offset().top + o1_yChange,
+              'bottom': o1.offset().top + o1.height() + o1_yChange
+        };
+        const o2D = { 'left': o2.offset().left,
+              'right': o2.offset().left + o2.width(),
+              'top': o2.offset().top,
+              'bottom': o2.offset().top + o2.height()
+        };
+        // Adapted from https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+        if (o1D.left < o2D.right &&
+          o1D.right > o2D.left &&
+          o1D.top < o2D.bottom &&
+          o1D.bottom > o2D.top) {
+           // collision detected!
+           return true;
+        }
+        return false;
       },
 
       selectGrade(event, grade) {
@@ -70,46 +101,80 @@ var resultView = new Vue({
         $('body').css('background-image', "url("+this.selectedLocation.img+")");
       },
 
+      getNewTip() {
+        var num = this.tipNum;
+        while(num == this.tipNum){
+          num = Math.floor((Math.random() * this.tips.length));
+        }
+        this.tipNum = num;
+      },
+
+      // need to reset blocks and potentially modify number of snowballs
+      // also need to add in a part with wintering tip
+      levelTransition() {
+        this.getNewTip();
+        this.playGame = false;
+        this.levelLoad = true;
+        this.levelNum++;
+        this.snowballIndex = 0;
+        this.snowballLimit = this.snowballLimit + 12;
+      },
+
+      newLevel() {
+        this.levelLoad = false;
+        this.playGame = true;
+      },
+
       handleGlobalKeyDown(e) {
         console.log(e.keyCode);
-        if(e.keyCode == "37"){ 
-            //left arrow
-           $('#player').css('left', this.leftpos_player - 10 + "px");
+        var gameDiv = $('#playGameDiv');
+        var shooter = $('#shooter');
+        var player = $('#player');
+        switch (e.which) {
+          case 37:
+             //left arrow
+           player.css('left', this.leftpos_player - 10 + "px");
            this.leftpos_player = this.leftpos_player - 10;
 
-           $('#shooter').css('left', this.leftpos_shooter - 10 + "px");
+           shooter.css('left', this.leftpos_shooter - 10 + "px");
            this.leftpos_shooter = this.leftpos_shooter - 10;
-        }
-        else if (e.keyCode == "39"){
+           break;
+          case 39:
             //right arrow
-            $('#player').css('left', this.leftpos_player + 10 + "px");
+            player.css('left', this.leftpos_player + 10 + "px");
             this.leftpos_player = this.leftpos_player + 10;
 
-            $('#shooter').css('left', this.leftpos_shooter + 10 + "px");
+            shooter.css('left', this.leftpos_shooter + 10 + "px");
             this.leftpos_shooter = this.leftpos_shooter + 10;
-        }
-
-        else if (e.keycode == "38"){
-          console.log("fire attempt");
-            var snowballDivStr = "<div id='s-" + snowballIndex + "' class='snowball'><img src='img/snowball.jpg'/></div>";
-            playGame.append(snowballDivStr);
-            var curSnowball = $('#s-'+snowballIndex);
-            snowballIndex++;
-
-            curSnowball.css('top', shooter.css('top'));
-
-            var rxPos = parseInt(shooter.css('left')) + (shooter.width()/2);
+            break;
+          case 38:
+            console.log("fire attempt");
+            // if player is out of snowballs, trigger level transition
+            if(this.snowballIndex >= this.snowballLimit) {
+              console.log("Out of snowballs!");
+              this.levelTransition();
+              break;
+            }
+            var snowballDivStr = "<div id='s-" + this.snowballIndex + "' class='snowball'><img src='img/snowball.png'/></div>";
+            gameDiv.append(snowballDivStr);
+            // Create snowball handle
+            var curSnowball = $('#s-'+this.snowballIndex);
+            this.snowballIndex++;
+            // Set snowball position, vertical and horizontal
+            curSnowball.css('position', 'fixed');
+            curSnowball.css('top', parseInt(shooter.css('top')) + "px");
+            var rxPos = parseInt(shooter.css('left'));
             curSnowball.css('left', rxPos);
 
             setInterval( function() {
               curSnowball.css('top', parseInt(curSnowball.css('top'))-10);
-
-              if (parseInt(curSnowball.css('top')) < curSnowball.height()) {
-
-              curSnowball.remove();
+              if (parseInt(curSnowball.css('top')) <= curSnowball.height()) {
+                curSnowball.remove();
               }
             }, 50);
-
+            break;
+          default:
+            console.log("Invalid input!");
         }
       },
     },
