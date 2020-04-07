@@ -53,9 +53,12 @@
             <div class="gamePlayTitle">
                 Level {{ levelNum }}, Snowballs Remaining: {{ snowballLimit - snowballIndex }}
             </div>
+            <div class="pointsTile">
+                Points: {{ points }}
+            </div>
 
             <div v-for="(n, index) in levelNum">
-                <img v-for="(n, index) in 16" src="./img/iceBlock.gif" id="iceBlocks">
+                <img v-for="(n, index) in 16" src="./img/iceBlock.gif" id="iceBlocks" style="width: 100px">
             </div>
             <div id="player">
                 <img src="./img/avatar1.png" style="width: 100px">
