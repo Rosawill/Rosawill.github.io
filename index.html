@@ -11,24 +11,75 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
       <!-- CSS -->
       <link rel="stylesheet" type="text/css" href="style/style.css">
+      <script src="vue.js"></script>
+      <script src="script.js"></script>
    </head>
    <body>
       <div id="app">
-         <div class="introduction">
-            <p>I'm</p>
-            <p>Rosemary</p>
-            <p>Wilson</p>
-            <br>
-            <p>Welcome</p>
-            <p>to my</p>
-            <p>Website</p>
+         <div v-if="pages['Main']">
+            <div class="outer_intro">
+               <div class="introduction">
+                  <p>I'm</p>
+                  <p>Rosemary</p>
+                  <p>Wilson</p>
+                  <br>
+                  <p>Welcome</p>
+                  <p>to my</p>
+                  <p>Website</p>
+               </div>
+            </div>
+            <div class="spacer">
+                &nbsp;
+            </div>
+            <div>
+               <div class="navbar">
+                  <ul class="nav nav-tabs">
+                     <li v-for="(key, val) in pages" id="navtab">
+                       <a 
+                         data-toggle="tab"
+                         v-on:click="changePage(val)"
+                         >{{val}}
+                       </a>
+                     </li>
+                  </ul>
+               </div>
+               <div class="ominous_quote">
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+                  <p>Ominous quote!</p>
+               </div>
+            </div>
          </div>
-         <div class="navbar">
-            
-         </div>
-         <div class="ominous_quote">
-            <p>Ominous quote!</p>
-         </div>
+         <div v-else-if="pages['Professional']">Professional</div>
+         <div v-else-if="pages['Blog']">Blog</div>
+         <div v-else-if="pages['Gallery']">Gallery</div>
+         <div v-else-if="pages['Projects']">Projects</div>         
+         <div v-else-if="pages['Me']">Me</div>
       </div>
    </body>
 </html>
